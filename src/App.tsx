@@ -1,26 +1,55 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"; //as = буду использовать под именем
 
-function App() {
+import { PrivateRoute } from "./components/PrivateRoute";
+import { AuthContextProvider } from "./components/context/AuthContextProvider";
+
+import HomeLink from "./styles";
+
+import Preloader from "./components/AdditionalPages/Preloader";
+import ErrorMessage from "./components/AdditionalPages/ErrorMessage";
+
+import SignIn from "./components/Sign in";
+import SignUp from "./components/Sign up";
+
+import Civilization from "./components/pages/Civilization";
+import { CivilizationInfo } from "./components/pages/CivilizationInfo";
+
+import {Structures} from './components/pages/Structures'
+
+import {Technologies} from './components/pages/Technologies'
+
+import Units from './components/pages/Units'
+import UnitsInfo from './components/pages/UnitsInfo'
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+    <AuthContextProvider>
+      <Router>   
+        <nav>
+          <Link to='/Structures'> Structures</Link>
+          <Link to='/Technologies'> Technologies</Link>
+          <Link to='/Units'> Units</Link>
+          <Link to='/Civilization' style={HomeLink}>Civilization</Link>
+        </nav>
+        <Switch>   
+          <Route path="/Sign in" exact component={SignIn} />
+          <Route path="/Sign up" exact component={SignUp} />
 
+          <PrivateRoute exact path='/Civilization' component={Civilization}/>
+          <PrivateRoute exact path='/Civilization/:id' component={CivilizationInfo}/> 
+
+          <PrivateRoute exact path='/Structures' component={Structures}/>
+
+          <PrivateRoute exact path='/Technologies' component={Technologies}/>
+
+          <PrivateRoute exact path='/Units' component={Units}/>
+          <PrivateRoute exact path='/Units/:id'component={UnitsInfo}/>
+        </Switch>
+
+        <Preloader/>
+        <ErrorMessage/>
+      </Router>
+    </AuthContextProvider>
+  );
+};
 export default App;

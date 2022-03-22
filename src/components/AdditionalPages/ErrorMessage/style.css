@@ -1,0 +1,8 @@
+.error {
+  position: fixed;
+  width: 100%;
+  color: white;
+  font-size: 5rem;
+  height: 87vh;
+  background-color: red;
+}

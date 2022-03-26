@@ -15,18 +15,11 @@ export const ACTION_GET_DATA_FAILED = (error) => ({
   error,
 });
 
-export const getPostsAction = (url) => async (dispatch) => {
-  try {
-    dispatch(ACTION_GET_DATA_REQUESTED());
-    const res = await fetch(url);
-    const data = await res.json();
 
-    if (data.status === 'error') {
-      throw new Error('Error 404');
-    }
-
-    dispatch(ACTION_GET_DATA_SUCCEED(data));
-  } catch (e) {
-    dispatch(ACTION_GET_DATA_FAILED(e.message));
+export const LOADING_TOGGLE_ACTION = '  TOGGLE_LOADING';
+export function loadingToggleAction(status) {
+  return {
+    type: LOADING_TOGGLE_ACTION,
+    payload: status,
   }
-};
+}

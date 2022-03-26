@@ -1,21 +1,32 @@
 import { useHistory, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import Preloader from "../../../AdditionalPages/Preloader";
+import { StyledCivilizations, StyledShortList, StyledButton } from "../../../../styles";
 
 const UniqueUnit = ({url}) => {
   const { id } = useParams();
   const [post, setPost]= useState(null);
   let history = useHistory();
 
+  const [loading, setLoading] = useState(false);
+
+  const fetchCivilizationsList = async () => {
+    const data = await fetch(`https://thingproxy.freeboard.io/fetch/${url}`);
+    const items = await data.json();
+    setPost(items);
+    setLoading(true);
+  }
+
   useEffect (()=>{
-    fetch(`https://thingproxy.freeboard.io/fetch/${url}`)
-    .then(res => res.json())
-    .then(data => setPost(data));
+    fetchCivilizationsList();
   }, [id]);
   
   return (
     <div>
+      {loading ? (
+    <div>
     {post && (
-      <div>
+      <div style={StyledCivilizations}>
         <p>id: {post.id}</p>
         <p>name: {post.name}</p>
         <p>description: {post.description}</p>
@@ -23,7 +34,7 @@ const UniqueUnit = ({url}) => {
         <p>age: {post.age}</p>
         <p>created_in: <a href={`${post.created_in}`}>{post.created_in}</a></p>
         <p>cost:</p>
-        <ul>
+        <ul style={StyledShortList}>
           <li>Food = {post.cost.Food}</li>
           <li>Gold = {post.cost.Gold}</li>
         </ul>
@@ -40,9 +51,10 @@ const UniqueUnit = ({url}) => {
             <li key={attack_bonus_item}>{attack_bonus_item}</li>
           ))}
         </ul>
-        <button onClick={() => history.goBack()}>Back with History</button>
+        <StyledButton onClick={() => history.goBack()}>Back with History</StyledButton>
       </div>
     )}
+  </div>) : <Preloader/>}
   </div>
   );
 };

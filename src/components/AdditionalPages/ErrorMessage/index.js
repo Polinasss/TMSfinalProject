@@ -8,7 +8,10 @@ const ErrorMessage = () => {
 
   return (
     <>
-    { !!message && <div>{message}</div>}
+    <div>
+      <p>Error!</p>
+      <p>{message}</p>
+    </div>
     </>
     )
 };
